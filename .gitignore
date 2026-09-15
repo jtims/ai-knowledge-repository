@@ -1,0 +1,14 @@
+# macOS / Finder
+.DS_Store
+Icon?
+._*
+
+# Microsoft Office lock files
+~$*
+
+# Obsidian Smart Connections index (regenerable, large)
+.smart-env/
+
+# Cloud-sync conflict copies
+*-Conflict.*
+* (1).*

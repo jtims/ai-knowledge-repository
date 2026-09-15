@@ -1,0 +1,20 @@
+---
+id: LOV-C022
+platform: lovable
+domain: deployment
+severity: design-invalidating
+status: active
+provenance:
+  - {type: official-doc, ref: "docs.lovable.dev/integrations/github FAQ, 'What happens if I rename, move, or delete my GitHub repository?' plus 'What happens if I rename my GitHub username or organization?' plus 'What happens if I transfer my project to another workspace?'", date: 2026-08-28}
+  - {type: official-doc, ref: "docs.lovable.dev/integrations/git-sync-overview Limitations: 'Reconnecting creates a new repository. You cannot re-link a previously disconnected repository.'", date: 2026-08-28}
+  - {type: official-doc, ref: "docs.lovable.dev/integrations/gitlab Limitations: 'Unlike GitHub, renaming or moving a GitLab project breaks the sync.'", date: 2026-08-28}
+  - {type: session-verified, ref: "captured 2026-08-28 while fact-checking a secondary source. the org plugin repository templates/AGENTS.md.lovable.template asserts 'Never rename or move this repo after the Lovable integration is connected. It breaks the sync and cannot be corrected afterward', which the vendor docs above falsify on BOTH limbs for GitHub. Recorded as plugin defect D8, internal record only", date: 2026-08-28}
+verified: 2026-08-28
+related: ["[[LOV-C011_github-connection-invisible-to-exports-and-api]]", "[[LOV-C003_no-eject-for-shipped-apps]]"]
+---
+
+**Constraint:** On a Lovable-synced repository the destructive operation is TRANSFER, not rename, and the intuitive repair is the destructive one. Renaming the repository itself is SAFE on GitHub (Lovable detects the rename and updates the connection automatically) and BREAKS sync on GitLab. Sync breaks on four other operations: transferring the repository to another account or organization, deleting it, renaming the owning GitHub username or organization, and transferring the Lovable project to another workspace. Each of those is repairable only by reversing the operation itself (transfer the repository back, restore the deleted repository, revert the account name). Disconnect-and-reconnect is NOT a repair: reconnecting ALWAYS creates a NEW repository, and a previously disconnected repository can never be re-linked.
+
+**Design consequence:** The obvious remediation for a broken sync destroys the link permanently, so a design that treats "disconnect and reconnect" as a recovery step converts a reversible fault into an irreversible one and orphans the original repository on the host. Any runbook, migration plan, or org restructuring that moves repositories between accounts or organizations, or renames a GitHub org, silently breaks every Lovable project synced beneath it, with recovery gated on reversing the org-level change or on vendor support rather than on anything the project owner controls. Provider choice is not neutral here: a rename-tolerant assumption carried over from GitHub is false on GitLab. Do not accept second-hand statements of this boundary. The org-authored `templates/AGENTS.md.lovable.template` in the org plugin repository states the inverse of the GitHub rule and claims an irreversibility the vendor docs contradict.
+
+**Sanctioned workarounds:** Treat repository location and owning-account name as frozen for the life of a Lovable-synced project, and route any org restructuring through a pre-check that enumerates synced projects first. When sync is already broken, reverse the originating operation (transfer back, restore the repository, revert the name) or contact Lovable support to re-attach; never disconnect and reconnect as a first move. Accept a new repository only as a deliberate last-resort decision, with the loss of the original link understood and the old repository archived on the host. On GitLab, additionally treat rename and move as breaking. Verify any claim about this boundary against `docs.lovable.dev` directly, because the vendor's own `integrations/git-sync-overview` Limitations page carries a blanket "do not rename" that the provider-specific `integrations/github` and `integrations/gitlab` pages both refine.

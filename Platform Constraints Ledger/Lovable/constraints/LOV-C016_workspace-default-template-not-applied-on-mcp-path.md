@@ -1,0 +1,18 @@
+---
+id: LOV-C016
+platform: lovable
+domain: governance
+severity: design-invalidating
+status: active
+provenance:
+  - {type: session-verified, ref: "executed control test on the org workspace with the org template CONFIRMED set as the workspace default (dashboard Settings > Templates shows it carrying the Default state while the other four offer Set as default). create_project called with workspace_id + initial_message and NO template_project_id produced project <control-project-id>; its file tree carried none of the template's identifying files (no src/authz, no src/auth.ts, no src/StandaloneApp.tsx, no .env.mf-staging, no .env.mf-production, no TEMPLATE-SETUP.md, no docs/patterns, no brand assets), its AGENTS.md contained Lovable generic git-sync boilerplate rather than the template governance guide, and its package.json was name tanstack_start_ts. Cost 0.4 credits", date: 2026-08-24}
+  - {type: session-verified, ref: "list_template_projects payload fields are id/name/description/updated_at only - NO is_default; get_workspace payload carries plan and caller membership but NO template setting. rg for template_project_id across the ENTIRE official docs corpus returned ZERO hits on two independent snapshots (188 and 199 .mdx files), so the MCP template path is undocumented in either direction", date: 2026-08-24}
+verified: 2026-08-24
+related: ["[[LOV-C006_knowledge-and-skills-dont-enforce]]", "[[LOV-C017_bare-mcp-create-returns-different-framework]]", "[[LOV-C018_initiate-project-cannot-scope-or-template]]"]
+---
+
+**Constraint:** a workspace **default design template** is NOT applied on the MCP `create_project` path, and the MCP surface exposes **no field whatsoever** revealing whether a default is set or which template it names. The setting governs first-party creation surfaces (dashboard prompt box, desktop, mobile, ChatGPT) only.
+
+**Design consequence:** any design that relies on the workspace default template to govern MCP-created projects is void. Two independent failures compose. First, omitting `template_project_id` is legal, silent, and yields an ungoverned project. Second, because neither `list_template_projects` (no `is_default`) nor `get_workspace` (no template setting) exposes the default, a client can never verify that a default exists, confirm which template it names, or detect an admin clearing it. This is the positive-space twin of [[LOV-C006_knowledge-and-skills-dont-enforce]]: a *setting* rather than an *instruction*, but equally unenforceable and, worse, equally unobservable from the API. Governance built on it fails silently and undetectably. Note that the setting is not useless: it is the only control covering dashboard, desktop, mobile and ChatGPT creation, so it should be set AND treated as covering nothing on the MCP path.
+
+**Sanctioned workarounds:** pass `template_project_id` **explicitly on every governed `create_project`**; treat omission as a hard error rather than a fallback. Resolve the template id from a governed configuration or by `list_template_projects` filtered per [[LOV-C019_template-list-conflates-design-systems]], and **halt and ask** rather than creating bare when resolution is ambiguous. Because the call succeeding does not prove the seed landed, verify after creation by reading a **template-unique file and checking its CONTENT** - filename presence alone is insufficient, since the default scaffold ships its own unrelated `AGENTS.md`. For deterministic enforcement rather than instruction-level compliance, gate the call in code (a `PreToolUse` hook that blocks `create_project` lacking `template_project_id`), noting that per [[CLD-C018_pretooluse-hooks-never-run-for-subagent-calls]] such a hook does not fire for subagent tool calls.
