@@ -3,7 +3,7 @@ id: CLD-C029
 platform: Claude Code
 domain: governance
 severity: design-invalidating
-status: active
+status: superseded
 provenance:
   - type: session-verified
     ref: "owner session d1ea2b00, desktop app with CLI 2.1.270 in permission mode auto: bash-write-tripwire.sh returned permissionDecision ask on two read-only heredoc python3 commands at 14:16:01Z and 14:16:21Z (hook_success records in the transcript); both commands executed (session-changelog.log at 14:16:13Z and 14:16:30Z); no batch-approve token was active (0 BATCH-SUPPRESS lines)"
@@ -17,9 +17,14 @@ provenance:
   - type: official-doc
     ref: "code.claude.com/docs/en/permission-modes (fetched 2026-09-15): prompts forced by an ask rule or by a hook are still shown in auto mode, which the two silent asks contradict; code.claude.com/docs/en/hooks: the Bash if filter is best-effort and runs the hook when it cannot parse a command"
     date: 2026-09-15
+  - type: session-verified
+    ref: "SUPERSEDED 2026-09-15 by CLD-C030 (session 3231f15e): the desktop app log ~/Library/Logs/Claude/main.log shows both asks raised a Bash permission request (09:16:06 and 09:16:26 local) answered once after 7 and 4 s, at the moments the commands ran, so the prompt did reach the permission dialog and the classifier did not decide either command; the no-prompt reading rested on recollection, which the log contradicts"
+    date: 2026-09-15
 verified: 2026-09-15
-related: ["[[CLD-C011_auto-mode-classifier-does-not-gate-machine-state]]", "[[CLD-C013_file-permission-rules-only-edit-and-read]]", "[[CLD-C018_pretooluse-hooks-never-run-for-subagent-calls]]", "[[CLD-C019_ask-rules-fail-closed-without-an-answerer]]"]
+related: ["[[CLD-C030_permission-prompts-are-recorded-only-in-the-desktop-app-log]]", "[[CLD-C011_auto-mode-classifier-does-not-gate-machine-state]]", "[[CLD-C013_file-permission-rules-only-edit-and-read]]", "[[CLD-C018_pretooluse-hooks-never-run-for-subagent-calls]]", "[[CLD-C019_ask-rules-fail-closed-without-an-answerer]]"]
 ---
+
+> **Superseded 2026-09-15 by [[CLD-C030_permission-prompts-are-recorded-only-in-the-desktop-app-log|CLD-C030]].** Both asks reached the permission dialog and were answered "once"; the text below is kept as recorded.
 
 **Constraint:** In permission mode `auto`, a PreToolUse hook's `ask` on a Bash command the harness cannot parse (observed: a heredoc, `python3 - <<'EOF'`) does not reliably reach the user. Two such asks resolved with no prompt and the commands ran, while all four probes sent one call at a time (two single-line commands and two file-tool writes) prompted as documented. The mechanism is inferred from two events and one classifier denial: an unparseable command is decided by the auto-mode classifier, which can approve it over the hook's `ask`.
 

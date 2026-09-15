@@ -11,8 +11,11 @@ provenance:
   - type: session-verified
     ref: "own read 2026-08-19 of ~/.claude/settings.json — all 11 Layer-1 file permission ask-rules are Edit(...) form (zero Write()/MultiEdit()); consistent with only Edit()/Read() path rules being consulted"
     date: 2026-08-19
-verified: 2026-08-19
-related: ["[[CLD-C009_plugin-subagents-ignore-permission-hooks-mcp]]", "[[CLD-C011_auto-mode-classifier-does-not-gate-machine-state]]"]
+  - type: session-verified
+    ref: "re-verified 2026-09-15 (owner sessions eef75a3d and 3231f15e, desktop app with CLI 2.1.270 in auto mode): the D35 Edit(//**/...) ask rules raised a permission prompt for 7 of 7 Writes to paths no hook covered (~/.gitconfig, ~/.ssh/config, ~/.ssh/allowed_signers and four scratch .npmrc probes), each an 'Emitted tool permission request ... for Write' line in ~/Library/Logs/Claude/main.log; the permissions page re-fetched the same day still states that Edit rules apply to all built-in tools that edit files and that a Write(path) rule is accepted but never consulted, with a startup warning"
+    date: 2026-09-15
+verified: 2026-09-15
+related: ["[[CLD-C009_plugin-subagents-ignore-permission-hooks-mcp]]", "[[CLD-C011_auto-mode-classifier-does-not-gate-machine-state]]", "[[CLD-C030_permission-prompts-are-recorded-only-in-the-desktop-app-log]]"]
 ---
 
 **Constraint:** Claude Code consults file-path permission rules for `Edit(path)` and `Read(path)` **only** (v2.1.210+). A path rule written for `Write`, `NotebookEdit`, `Glob`, or the legacy `MultiEdit` is accepted but NEVER consulted (it warns at startup) — the sole exception being a `Glob` path rule passed via `--allowedTools`. A tool-name rule with NO path (e.g. a bare `Write` deny) DOES match, at the tool level, everywhere. `Edit` rules already apply to all built-in file-editing tools; a `Read` deny rule also blocks `Edit` and `Write` on the same path (but not `NotebookEdit`).
