@@ -8,6 +8,9 @@ provenance:
   - type: session-verified
     ref: "live proof 2026-09-17, remarkable-agent-push repo. With origin set to git@github.com:jtims/remarkable-agent-push.git the push went to https://github.com/... and was rejected with: refusing to allow an OAuth App to create or update workflow .github/workflows/ci.yml without workflow scope. git config --global --get-regexp url showed url.https://github.com/.insteadof git@github.com: and gh auth status showed token scopes without workflow. Setting origin to the ssh://git@github.com/ form was not rewritten and reached SSH, where it failed separately because ~/.ssh/known_hosts did not exist."
     date: 2026-09-17
+  - type: session-verified
+    ref: "re-verified later on 2026-09-17. After the owner populated ~/.ssh/known_hosts from gh api meta and the three fingerprints were matched against GitHub's published values, a push over the ssh:// remote succeeded on the first try, workflow files included, with the OAuth token's scopes unchanged. Every later push and tag in that session used the same remote."
+    date: 2026-09-17
 verified: 2026-09-17
 related: []
 ---

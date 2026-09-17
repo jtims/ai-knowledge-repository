@@ -1,6 +1,6 @@
 # Platform Constraints Ledger — Global MOC
 
-**Version: 1.27 | 2026-09-17** · SSOT for hard platform constraints (facts that invalidate designs if unknown). Contract: [[_SCHEMA-Constraints]] · New entry: `_templates/constraint-entry-template.md` + same-turn capture protocol.
+**Version: 1.28 | 2026-09-17** · SSOT for hard platform constraints (facts that invalidate designs if unknown). Contract: [[_SCHEMA-Constraints]] · New entry: `_templates/constraint-entry-template.md` + same-turn capture protocol.
 
 ## Platforms
 
@@ -12,7 +12,7 @@
 | Python (CPython + stdlib) | [[_Python-Constraints-MOC]] | 2 | PY |
 | Git (client, host-dependent) | [[_Git-Constraints-MOC]] | 2 | GIT |
 | Atlassian (Jira + Confluence, connector surface) | [[_Atlassian-Constraints-MOC]] | 1 | JIRA |
-| reMarkable (tablets, cloud sync, third-party clients) | [[_reMarkable-Constraints-MOC]] | 3 | RMK |
+| reMarkable (tablets, cloud sync, third-party clients) | [[_reMarkable-Constraints-MOC]] | 4 | RMK |
 | ChatGPT · Salesforce · HubSpot · Stripe · Datadog | — (reserved) | 0 | see [[_SCHEMA-Constraints]] |
 
 ## Design-invalidating quick sheet (the never-assume list)
@@ -55,6 +55,7 @@
 - **[[RMK-C001_official-import-is-pdf-and-epub-only|RMK-C001]]** a reMarkable officially imports PDF and EPUB only, so sending markdown or any other text means either a converted reading document or a native notebook through the undocumented sync protocol. Decide which at the start
 - **[[RMK-C002_developer-mode-factory-resets-and-breaks-secure-boot|RMK-C002]]** SSH on a Paper Pro requires developer mode, which FACTORY-RESETS the device, breaks the secure-boot chain, adds a permanent boot warning and ends vendor support. Prefer the cloud or USB paths
 - **[[RMK-C003_sync-v3-write-replaces-the-account-wide-root-index|RMK-C003]]** adding ONE document through sync v3 replaces the ACCOUNT-WIDE root index, so a client that skips a line it cannot parse deletes that document from the whole library. Require a fail-closed parser, verbatim re-emission and a recorded previous root hash
+- **[[RMK-C004_document-api-returns-401-to-a-browser-paired-device-token|RMK-C004]]** the reMarkable document API answers 401 to a browser-paired device token EVEN WITH Connect active, so such a client cannot create folders or delete what it pushed, and the client's "token expired" message is wrong. Do not re-pair; target an existing folder by id, and let the owner delete in the vendor app
 
 ## Access mechanisms (live)
 
@@ -65,6 +66,7 @@
 **Owner roadmap:** refine into a working knowledge graph (typed edges, query views); consolidate current platform data from the old platform-reference tree into `AI Knowledge Repository/` (owner-led, later session).
 
 **Changelog**
+- v1.28 (2026-09-17): **[[RMK-C004_document-api-returns-401-to-a-browser-paired-device-token|RMK-C004]] added; [[GIT-C002_https-rewrite-plus-missing-workflow-scope-blocks-workflow-pushes|GIT-C002]] re-verified.** RMK-C004 was declined at v1.27 as "the document API requires Connect" because a comment in third-party source is not provenance. It is admitted on live proof: `rr mkdir` drew a 401 while the same token worked on sync v3 one second later, on an account the owner confirms has Connect active, so the refusal is not a tier matter. The cause (a sync-only token scope) is inferred and the node says so. The counterpart capability [[RMK-CAP001_native-notebooks-deliverable-through-cloud-sync|RMK-CAP001]] landed in the Capabilities Ledger the same day after a live push was verified three ways and confirmed on the tablet by the owner. reMarkable 4 active; total active 63 to 64.
 - v1.27 (2026-09-17): **reMarkable added as a platform (prefix `RMK`), seeding [[RMK-C001_official-import-is-pdf-and-epub-only|RMK-C001]], [[RMK-C002_developer-mode-factory-resets-and-breaks-secure-boot|RMK-C002]] and [[RMK-C003_sync-v3-write-replaces-the-account-wide-root-index|RMK-C003]]; [[GIT-C002_https-rewrite-plus-missing-workflow-scope-blocks-workflow-pushes|GIT-C002]] added.** All four come from the `an owner project` session that audited the `rr` client. RMK-C003 is the one with reach beyond its platform: it records a fail-open parser feeding a whole-index rewrite in a working, released client, the same silent-wrong-result family as PY-C001, PY-C002, GIT-C001 and JIRA-C001, except that here the wrong result is a deleted document. GIT-C002 is severity `costly`, so it is listed in its hub and not on the quick sheet: the push fails loudly, and only the rewrite that causes it is silent. One candidate was declined at the admission bar and one capability is deferred until a live push is observed; both are recorded in [[_reMarkable-Constraints-MOC]]. Git 2 active, reMarkable 3 active; total active 59 to 63.
 - v1.26 (2026-09-15): **CLD-C030 added, and it SUPERSEDES CLD-C029, the ledger's first supersession.** [[CLD-C030_permission-prompts-are-recorded-only-in-the-desktop-app-log|CLD-C030]] records that the session transcript holds neither a permission prompt nor its answer, and that in the desktop app only `~/Library/Logs/Claude/main.log` does. Session-verified in the F33 remediation session (3231f15e, CLI 2.1.270, auto mode): the log shows that both heredoc asks CLD-C029 called silent raised a Bash prompt answered once after 7 and 4 s, and that all four Writes finding F33 called unprompted raised a Write prompt answered once after 1 to 5 s; a classifier-routed control write raised none, and a hands-off probe stayed pending 124 s until the owner answered. [[CLD-C029_hook-ask-on-unparseable-bash-can-pass-without-prompt|CLD-C029]] flips to `status: superseded` with a `related` edge, its text kept as recorded, and its qualification of [[CLD-C011_auto-mode-classifier-does-not-gate-machine-state|CLD-C011]] is withdrawn with it. [[CLD-C013_file-permission-rules-only-edit-and-read|CLD-C013]] is re-verified (7 of 7 Writes gated by `Edit()` rules; docs re-fetched). Claude Code 29 active and 1 superseded; total active unchanged at 59.
 - v1.25 (2026-09-15): **The two drift items noted in v1.24 are closed; no constraint changed.** The [[_SCHEMA-Constraints]] ID registry reads CLD C001–C029 (schema v1.4), and the [[_Claude-Code-Constraints-MOC]] hub table has rows for CLD-C026 to CLD-C029, matching their bullets. Totals unchanged: 59 active constraints.
