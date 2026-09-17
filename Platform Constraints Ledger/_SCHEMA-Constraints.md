@@ -1,6 +1,6 @@
 # Platform Constraints Ledger — Schema & Operating Contract
 
-**Version: 1.5 | 2026-09-15** · Owner-approved architecture (2026-08-06). This ledger is the **SSOT for hard platform constraints** — facts that invalidate a design if unknown. It is graph-ready by construction: atomic notes = nodes, typed frontmatter = properties, wikilinks = edges, MOCs = hubs.
+**Version: 1.6 | 2026-09-17** · Owner-approved architecture (2026-08-06). This ledger is the **SSOT for hard platform constraints** — facts that invalidate a design if unknown. It is graph-ready by construction: atomic notes = nodes, typed frontmatter = properties, wikilinks = edges, MOCs = hubs.
 
 ## Admission bar (owner-ruled)
 
@@ -34,8 +34,9 @@ Invoke the validator via `python3`, not the shebang, so the call does not depend
 | N8N | n8n | ACTIVE (C001–C002) |
 | CLD | Claude Code (harness; other Claude surfaces as their constraints arrive) | ACTIVE (C001–C030; C029 superseded) |
 | PY | Python (CPython interpreter and stdlib) | ACTIVE (C001-C002) |
-| GIT | Git (client behaviour, including host-filesystem-dependent behaviour) | ACTIVE (C001) |
+| GIT | Git (client behaviour, including host-filesystem-dependent behaviour and credential-routing configuration) | ACTIVE (C001-C002) |
 | JIRA | Atlassian (Jira + Confluence + the claude.ai connector tool surface) | ACTIVE (C001) |
+| RMK | reMarkable (paper tablets, reMarkable OS, the reMarkable cloud and its sync protocol, third-party cloud clients) | ACTIVE (C001-C003) |
 | GPT / SFDC / HUB / STR / DDG | ChatGPT · Salesforce · HubSpot · Stripe · Datadog | RESERVED |
 
 **Adding a platform:** create `<Platform>/{_<Platform>-Constraints-MOC.md, constraints/}` from templates, register the prefix here, add one keyword line to `~/.claude/hooks/platform-constraints-inject.sh`. No schema changes.
@@ -58,6 +59,7 @@ The moment a hard constraint is surfaced (owner correction, doc verification, li
 Near-term refinement adds typed edges (`supersedes`, `conflicts-with`, `depends-on`) and query views (Dataview / Smart Connections — `.smart-env` already indexes this vault). The atomic-node substrate is designed not to move.
 
 **Changelog**
+- v1.6 (2026-09-17): **reMarkable added as a platform (prefix `RMK`), seeded with RMK-C001 to RMK-C003; the Git range reads C001-C002.** Both arrive from one session in an owner project, which audited the `rr` push-to-tablet client before enabling it. RMK-C001 (official import is PDF and EPUB only) and RMK-C002 (developer mode factory-resets the device and breaks secure boot) are official-doc. RMK-C003 (a sync v3 write replaces the account-wide root index) is session-verified by source read, not by reproducing a loss, and the node says so. A fourth candidate, that the document API requires a Connect subscription, was DECLINED: its only evidence is a comment in third-party source, which is none of the three provenance types. GIT-C002 is live proof from the same session: a global `insteadOf` rule sent an SSH remote over HTTPS, where an OAuth token without `workflow` scope was refused. The Git scope line gains credential-routing configuration to cover it. No contract change.
 - v1.5 (2026-09-15): ID registry: the Claude Code range reads C001–C030. CLD-C030 was added in the F33 remediation session and supersedes CLD-C029, the ledger's first use of `status: superseded`, done as this contract specifies: a status flip plus a `related` edge, with the superseded node kept in place and still listed in its MOC (E7). No contract change.
 - v1.4 (2026-09-15): ID registry corrected: the Claude Code range reads C001–C029. CLD-C029 was added 2026-09-15 in an owner session, and this line was left at C028 (drift noted in the global MOC v1.24). No contract change.
 - v1.3 (2026-08-28): **Atlassian activated (prefix `JIRA`, previously reserved), seeded with JIRA-C001** - the claude.ai Atlassian connector's Jira tools can silently answer with Confluence objects (`getVisibleJiraProjects` returns spaces; literal-email JQL falls back to a Confluence keyword search). Session-verified live 2026-08-28 (source-expansion swarm run wf_b335fa0d-ee8). The prefix covers Atlassian as a whole (Jira + Confluence + connector tool surface) until the owner splits it. Same silent-wrong-result family as PY-C001/PY-C002/GIT-C001.
