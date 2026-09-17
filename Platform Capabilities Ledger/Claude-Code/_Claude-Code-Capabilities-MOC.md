@@ -1,6 +1,6 @@
 # Claude Code — Capabilities MOC
 
-**Platform hub** · prefix `CLD-CAP` · 6 active · schema: [[_SCHEMA-Capabilities]] · Grows via the Change-Control-gated capture protocol.
+**Platform hub** · prefix `CLD-CAP` · 7 active · schema: [[_SCHEMA-Capabilities]] · Grows via the Change-Control-gated capture protocol.
 
 | ID | Capability | Domain | Leverage | Verified |
 |---|---|---|---|---|
@@ -10,5 +10,6 @@
 | [[CLD-CAP004_subagent-frontmatter-pretooluse-hook-fires\|CLD-CAP004]] | A `PreToolUse` hook in a SUBAGENT'S OWN frontmatter DOES fire for that subagent and can block it (exit 2) — a real mechanical bound where settings-scope hooks give none (CLD-C018). Headless leg VERIFIED; **interactive leg UNVERIFIED** | governance | unlocks | 2026-08-23 |
 | [[CLD-CAP005_org-skill-files-on-disk-and-readable\|CLD-CAP005]] | An org-managed claude.ai skill is on DISK at `/mnt/skills/organization/<name>/` and its bundled `references/` files ARE model-readable — multi-file progressive-disclosure skills work on claude.ai, not just Claude Code. Caveat: reachable is NOT auto-loaded; a skill search returns metadata only | access | unlocks | 2026-08-24 |
 | [[CLD-CAP006_project-scope-settings-consulted-in-headless-and-sdk-runs\|CLD-CAP006]] | A project-scope `autoMemoryDirectory` redirect IS consulted in NON-INTERACTIVE runs (headless, `-p`, SDK) unconditionally, because `Aje() = !isInteractive() || trustAccepted`; and `userSettings` sits LAST in the chain, so a user-scope pin can never outrank a project redirect. Precedence half VERIFIED; the `--setting-sources` loading half stays UNKNOWN | data | unlocks | 2026-09-03 |
+| [[CLD-CAP007_skill-changes-load-live-without-restart\|CLD-CAP007]] | A skill added, edited or removed under `~/.claude/skills/` or a project's `.claude/skills/` is picked up INSIDE the running session, no restart: install and verify a skill in one session. Exceptions: bare mode; a top-level skills directory created mid-session; `SKILL.md` text only. Live pickup is not validation (CLD-C001) | deployment | accelerates | 2026-09-17 |
 
 **Cross-ledger:** capability nodes here link back to their governing [[_Claude-Code-Constraints-MOC|Claude Code constraints]] via `related`.
