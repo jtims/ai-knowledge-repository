@@ -1,6 +1,6 @@
 # Platform Constraints Ledger — Global MOC
 
-**Version: 1.30 | 2026-09-18** · SSOT for hard platform constraints (facts that invalidate designs if unknown). Contract: [[_SCHEMA-Constraints]] · New entry: `_templates/constraint-entry-template.md` + same-turn capture protocol.
+**Version: 1.31 | 2026-09-18** · SSOT for hard platform constraints (facts that invalidate designs if unknown). Contract: [[_SCHEMA-Constraints]] · New entry: `_templates/constraint-entry-template.md` + same-turn capture protocol.
 
 ## Platforms
 
@@ -10,7 +10,7 @@
 | n8n | [[_n8n-Constraints-MOC]] | 2 | N8N |
 | Claude Code | [[_Claude-Code-Constraints-MOC]] | 29 | CLD |
 | Python (CPython + stdlib) | [[_Python-Constraints-MOC]] | 2 | PY |
-| Git (client, host-dependent, host attribution) | [[_Git-Constraints-MOC]] | 3 | GIT |
+| Git (client, host-dependent, host attribution and push refusal) | [[_Git-Constraints-MOC]] | 4 | GIT |
 | Atlassian (Jira + Confluence, connector surface) | [[_Atlassian-Constraints-MOC]] | 1 | JIRA |
 | reMarkable (tablets, cloud sync, third-party clients) | [[_reMarkable-Constraints-MOC]] | 4 | RMK |
 | ChatGPT · Salesforce · HubSpot · Stripe · Datadog | — (reserved) | 0 | see [[_SCHEMA-Constraints]] |
@@ -66,6 +66,7 @@
 **Owner roadmap:** refine into a working knowledge graph (typed edges, query views); consolidate current platform data from the old platform-reference tree into `AI Knowledge Repository/` (owner-led, later session).
 
 **Changelog**
+- v1.31 (2026-09-18): **[[GIT-C004_github-refuses-pushes-authored-under-a-private-email|GIT-C004]] added.** With "Block command line pushes that expose my email" on, GitHub refused a push of five ledger commits into this repository, which is private and read only by its owner, because the latest commit carried the owner's address, which had moved onto the pushing account that day under [[GIT-C003_github-links-commits-to-the-account-holding-the-author-email|GIT-C003]]. The same repository had accepted pushes of commits under that address three days earlier. Costly, not on the quick sheet. Git 3 to 4.
 - v1.30 (2026-09-18): **[[GIT-C003_github-links-commits-to-the-account-holding-the-author-email|GIT-C003]] re-verified the same day, and its open half settled.** After the owner moved the address to `jtims`, all 17 commits read `verified: true, valid` where they had read `unknown_key`, with nothing pushed in between, so the signature result follows the address's account as the attribution does. The constraint sentence gains that clause; the mechanism stays INFERRED because GitHub's definition of `unknown_key` does not describe the case. No count change.
 - v1.29 (2026-09-18): **[[GIT-C003_github-links-commits-to-the-account-holding-the-author-email|GIT-C003]] added.** GitHub links a commit to whichever account holds the address in its author header, not to the pusher or the repository owner. Live proof from an owner project: minutes after `jtims/remarkable-agent-push` was made public, 17 commits authored under the owner's personal address rendered under a second account of the owner's, and a pre-publication review that had scanned content with 15 agents and an audit pass had never looked at the linkage. A second read the same day returned `jtims` for the same commits with nothing pushed in between, so the link follows the address's current account and reaches commits already on GitHub. Severity `costly`, so it is not on the quick sheet. The signature-verification half of the original observation is deliberately NOT in the constraint sentence: GitHub's REST reference defines the observed `unknown_key` reason as a key registered on no account, which does not explain the split by its wording, so the node records it as UNKNOWN. The Git scope line gains host attribution to cover it. 66 constraint nodes.
 - v1.28 (2026-09-17): **[[RMK-C004_document-api-returns-401-to-a-browser-paired-device-token|RMK-C004]] added; [[GIT-C002_https-rewrite-plus-missing-workflow-scope-blocks-workflow-pushes|GIT-C002]] re-verified.** RMK-C004 was declined at v1.27 as "the document API requires Connect" because a comment in third-party source is not provenance. It is admitted on live proof: `rr mkdir` drew a 401 while the same token worked on sync v3 one second later, on an account the owner confirms has Connect active, so the refusal is not a tier matter. The cause (a sync-only token scope) is inferred and the node says so. The counterpart capability [[RMK-CAP001_native-notebooks-deliverable-through-cloud-sync|RMK-CAP001]] landed in the Capabilities Ledger the same day after a live push was verified three ways and confirmed on the tablet by the owner. reMarkable 4 active; total active 63 to 64.
