@@ -1,6 +1,6 @@
 # Platform Constraints Ledger — Global MOC
 
-**Version: 1.32 | 2026-09-18** · SSOT for hard platform constraints (facts that invalidate designs if unknown). Contract: [[_SCHEMA-Constraints]] · New entry: `_templates/constraint-entry-template.md` + same-turn capture protocol.
+**Version: 1.33 | 2026-09-18** · SSOT for hard platform constraints (facts that invalidate designs if unknown). Contract: [[_SCHEMA-Constraints]] · New entry: `_templates/constraint-entry-template.md` + same-turn capture protocol.
 
 ## Platforms
 
@@ -66,6 +66,7 @@
 **Owner roadmap:** refine into a working knowledge graph (typed edges, query views); consolidate current platform data from the old platform-reference tree into `AI Knowledge Repository/` (owner-led, later session).
 
 **Changelog**
+- v1.33 (2026-09-18): **[[RMK-C004_document-api-returns-401-to-a-browser-paired-device-token|RMK-C004]] cross-linked to [[RMK-CAP003_folder-creatable-through-sync-v3-in-the-vendor-shape|RMK-CAP003]].** The constraint is unchanged and stays true of the document API; its sanctioned workarounds now say folder creation on sync v3 is implemented and proven (`rr 0.3.6-jt.6`) and deletion is not, and the reMarkable MOC row says the refusal is of that API. Reason: the inject hook serves RMK-C004 whenever a prompt names `rr mkdir`, and the capabilities ledger is pull-only, so without the edge a session running the new procedure would read only that it cannot make its own folder. No count change.
 - v1.32 (2026-09-18): **[[GIT-C004_github-refuses-pushes-authored-under-a-private-email|GIT-C004]] re-verified the same day, and its inferred clause settled.** A push whose latest commit was authored under the noreply address was accepted and carried the five refused commits, still under the private address, through with it: the check reads the most recent commit only, as the doc says. No count change.
 - v1.31 (2026-09-18): **[[GIT-C004_github-refuses-pushes-authored-under-a-private-email|GIT-C004]] added.** With "Block command line pushes that expose my email" on, GitHub refused a push of five ledger commits into this repository, which is private and read only by its owner, because the latest commit carried the owner's address, which had moved onto the pushing account that day under [[GIT-C003_github-links-commits-to-the-account-holding-the-author-email|GIT-C003]]. The same repository had accepted pushes of commits under that address three days earlier. Costly, not on the quick sheet. Git 3 to 4.
 - v1.30 (2026-09-18): **[[GIT-C003_github-links-commits-to-the-account-holding-the-author-email|GIT-C003]] re-verified the same day, and its open half settled.** After the owner moved the address to `jtims`, all 17 commits read `verified: true, valid` where they had read `unknown_key`, with nothing pushed in between, so the signature result follows the address's account as the attribution does. The constraint sentence gains that clause; the mechanism stays INFERRED because GitHub's definition of `unknown_key` does not describe the case. No count change.
