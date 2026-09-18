@@ -1,0 +1,22 @@
+---
+id: RMK-CAP002
+platform: reMarkable
+domain: data
+leverage: accelerates
+status: active
+provenance:
+  - type: session-verified
+    ref: "live runs 2026-09-18 with rr 0.3.6-jt.5 (jtims/remarkable-agent-push, the rr inspect command from commit 5eadbc1), owner session 4, on three items the owner approved. A folder made in the vendor app is one .metadata blob and nothing else, with 8 fields, and its root line ends :1:220. A folder the owner had trashed in the vendor app keeps its id and its root line and has two blobs, a .content holding an empty object and a .metadata with 13 fields, parent set to the literal trash and deleted false, and its root line ends :2:336. A notebook that had been opened on the tablet carries 15 metadata fields, lastOpened, lastOpenedPage and version among them. Each run printed the full root hash it read and ended with the line Read-only, nothing was written."
+    date: 2026-09-18
+  - type: session-verified
+    ref: "source read 2026-09-18 at 7234cce, owner session 5. src/sync_v3/inspect.rs calls load_root or get_blob for the root, get_blob for the item's own index and get_blob for each .metadata and .content entry, and nothing else, and both indexes go through the fail-closed parse_index. Two tests in that file read its own source and fail if a write call appears (inspect_source_has_no_write_call, inspect_source_only_calls_the_two_read_methods); session 4 read both as ok in both test jobs of CI run 35365733018. An older root is fetched by hash through the same get_blob call that rr root-restore uses in plan mode, which retrieved a root superseded for over an hour on 2026-09-17."
+    date: 2026-09-18
+verified: 2026-09-18
+related: ["[[RMK-C003_sync-v3-write-replaces-the-account-wide-root-index]]", "[[RMK-C004_document-api-returns-401-to-a-browser-paired-device-token]]", "[[RMK-CAP001_native-notebooks-deliverable-through-cloud-sync]]"]
+---
+
+**Capability:** A client paired as a device can read exactly how any document or folder is stored in the reMarkable cloud (its line in the root index, its own index, and its `.metadata` and `.content` JSON) from the current sync v3 root or from an older root named by hash, using blob downloads only, so the undocumented shapes that the vendor's own apps write can be learned from the owner's library without a single write.
+
+**What it unlocks:** RMK-C004 closes the document API to this kind of client, so creating a folder or deleting an item has to be rebuilt on sync v3, and RMK-C003 makes every such write a rewrite of the account-wide root. The obvious ways to learn what a folder or a trashed item must look like are trial writes against that root, or trust in third-party source. This is the cheaper and safe path: read a folder the vendor app made, read an item the vendor app trashed, and, because superseded roots stay retrievable by hash, read the same item before and after a vendor-app action and compare the two. The write design then copies shapes the tablet is known to accept. It changed a build decision in this estate: `rr mkdir`, and `rr rm` as a move to the trash, are designed in detail only after `rr inspect` has read the shapes (an owner project rulings D37 and D38). It is also the way to record a full root hash before an experiment.
+
+**Caveats & linked constraints:** Read-only is not the same as private: the output carries names and metadata from the owner's library, so it runs on the owner's word, on items the owner names, on the main thread. The shapes are undocumented and the vendor can change them. Three items were read, and that the fuller field set comes from the tablet touching an item is INFERRED from those three. Which fields a move to the trash itself changes is UNKNOWN until a before and an after capture of one item are compared. `rr inspect --root <hash>` against an older root is proven by source read and by the same download inside `rr root-restore` plan mode, not yet by a live `rr inspect` run. How long the vendor keeps a superseded root is UNKNOWN beyond roughly an hour. Reading shapes does not make a write safe: any write built on them is still bound by [[RMK-C003_sync-v3-write-replaces-the-account-wide-root-index|RMK-C003]] (fail closed, re-emit verbatim, a planner with its own count rule, a dry run immediately before, a recorded previous root), and the document API stays refused ([[RMK-C004_document-api-returns-401-to-a-browser-paired-device-token|RMK-C004]]).
