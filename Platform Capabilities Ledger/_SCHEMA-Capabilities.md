@@ -1,6 +1,6 @@
 # Platform Capabilities Ledger — Schema & Operating Contract
 
-**Version: 1.2 | 2026-09-18** · Owner-approved architecture (2026-08-10). Deliberate counterpart to the Platform Constraints Ledger ([[_SCHEMA-Constraints]]). This ledger is the **SSOT for decision-enabling platform capabilities** — non-obvious affordances that, if unknown, would cause you to wrongly rule a *possible* design OUT. Graph-ready by construction: atomic notes = nodes, typed frontmatter = properties, wikilinks = edges, MOCs = hubs. Same discipline as the Constraints Ledger, inverse polarity.
+**Version: 1.3 | 2026-09-18** · Owner-approved architecture (2026-08-10). Deliberate counterpart to the Platform Constraints Ledger ([[_SCHEMA-Constraints]]). This ledger is the **SSOT for decision-enabling platform capabilities** — non-obvious affordances that, if unknown, would cause you to wrongly rule a *possible* design OUT. Graph-ready by construction: atomic notes = nodes, typed frontmatter = properties, wikilinks = edges, MOCs = hubs. Same discipline as the Constraints Ledger, inverse polarity.
 
 ## Admission bar (owner-ruled — the inverse razor)
 
@@ -48,7 +48,7 @@ The two ledgers share one contract validator and one git mirror; a capability no
 | LOV-CAP | Lovable (incl. Lovable Cloud / managed Supabase) | ACTIVE (seeding) |
 | N8N-CAP | n8n | ACTIVE (seeding) |
 | CLD-CAP | Claude Code | ACTIVE (seeding) |
-| RMK-CAP | reMarkable | ACTIVE (CAP001-CAP002) |
+| RMK-CAP | reMarkable | ACTIVE (CAP001-CAP003) |
 | GPT / JIRA / SFDC / HUB / STR / DDG (·-CAP) | ChatGPT · Atlassian · Salesforce · HubSpot · Stripe · Datadog | RESERVED |
 
 **Adding a platform:** create `<Platform>/{_<Platform>-Capabilities-MOC.md, capabilities/}`, register the prefix here. No inject-hook line (pull-only). No schema changes.
@@ -66,6 +66,7 @@ When a decision-enabling capability is verified (official doc, owner confirmatio
 Typed edges (`supersedes`, `conflicts-with`, `depends-on`, and cross-ledger `enables` / `bounded-by`) + query views (Dataview / Smart Connections). The atomic-node substrate is designed not to move.
 
 **Changelog**
+- v1.3 (2026-09-18): ID registry: the reMarkable range reads CAP001-CAP003. RMK-CAP003 (a folder can be created through sync v3 in the vendor's own shape, without the document API) is session-verified from an owner project. No contract change.
 - v1.2 (2026-09-18): ID registry: the reMarkable range reads CAP001-CAP002. RMK-CAP002 (stored shapes are readable from any root with downloads only) is session-verified from an owner project. No contract change.
 - v1.1 (2026-09-17): ID registry: reMarkable added (prefix `RMK-CAP`), seeded with RMK-CAP001, mirroring the `RMK` platform added to the Constraints Ledger the same day. No contract change.
 - v1.0 (2026-08-10): initial. Sibling ledger established under `AI Knowledge Repository/`. Inverse-razor admission bar; `-CAP` ID infix; `leverage` axis; pull-only access (no inject hook); shared validator/mirror with the Constraints Ledger (generalization tracked as Phase 2). Both ledger schemas suffixed (`_SCHEMA-Constraints.md` / `_SCHEMA-Capabilities.md`) for vault-wide basename symmetry (Option R — the Constraints schema was renamed from `_SCHEMA.md` and its links/pointers repointed the same day). Ratified 2026-08-10 via 4-question structured adjudication (structure=sibling · admission=decision-enabling · access=pull-only · tooling=generalize-existing).
