@@ -1,6 +1,6 @@
 # Platform Constraints Ledger — Schema & Operating Contract
 
-**Version: 1.9 | 2026-09-18** · Owner-approved architecture (2026-08-06). This ledger is the **SSOT for hard platform constraints** — facts that invalidate a design if unknown. It is graph-ready by construction: atomic notes = nodes, typed frontmatter = properties, wikilinks = edges, MOCs = hubs.
+**Version: 1.10 | 2026-09-22** · Owner-approved architecture (2026-08-06). This ledger is the **SSOT for hard platform constraints** — facts that invalidate a design if unknown. It is graph-ready by construction: atomic notes = nodes, typed frontmatter = properties, wikilinks = edges, MOCs = hubs.
 
 ## Admission bar (owner-ruled)
 
@@ -32,7 +32,7 @@ Invoke the validator via `python3`, not the shebang, so the call does not depend
 |---|---|---|
 | LOV | Lovable (incl. Lovable Cloud / managed Supabase) | ACTIVE (C001–C024) |
 | N8N | n8n | ACTIVE (C001–C002) |
-| CLD | Claude Code (harness; other Claude surfaces as their constraints arrive) | ACTIVE (C001–C030; C029 superseded) |
+| CLD | Claude Code (harness; other Claude surfaces as their constraints arrive) | ACTIVE (C001–C032; C029 superseded) |
 | PY | Python (CPython interpreter and stdlib) | ACTIVE (C001-C002) |
 | GIT | Git (client behaviour, including host-filesystem-dependent behaviour and credential-routing configuration, how a Git host attributes the commits it receives, and which pushes it refuses because of their author address) | ACTIVE (C001-C004) |
 | JIRA | Atlassian (Jira + Confluence + the claude.ai connector tool surface) | ACTIVE (C001) |
@@ -59,6 +59,7 @@ The moment a hard constraint is surfaced (owner correction, doc verification, li
 Near-term refinement adds typed edges (`supersedes`, `conflicts-with`, `depends-on`) and query views (Dataview / Smart Connections — `.smart-env` already indexes this vault). The atomic-node substrate is designed not to move.
 
 **Changelog**
+- v1.10 (2026-09-22): ID registry: the Claude Code range reads C001–C032 (C029 superseded). CLD-C031 (artifact page code has no outbound network) and CLD-C032 (the artifact's in-page Claude call selects a tier, not a model) are the first claude.ai artifact-runtime nodes, admitted under the existing other-surfaces provision of the CLD row rather than as a new platform; provenance is the runtime contract 0.2.52 type definitions (official-doc) read 2026-09-22 in an owner project. No inject-hook keyword added: a generic artifact keyword would inject the whole CLD set on most prompts. No schema changes.
 - v1.9 (2026-09-18): ID registry: the Git range reads C001-C004, and the Git scope line gains push refusal by author address. GIT-C004 (GitHub refuses a push whose latest commit carries a private address of the pushing account, also into a private repository) is live proof from an owner project plus the official doc. No contract change.
 - v1.8 (2026-09-18): ID registry: the Git range reads C001-C003, and the Git scope line gains host attribution. GIT-C003 (GitHub links a commit to the account that holds its author address) is official-doc plus two live reads from an owner project. It sits under `GIT` rather than a new GitHub prefix by owner ruling, following the v1.6 precedent of widening the Git scope line for GIT-C002. No contract change.
 - v1.7 (2026-09-17): ID registry: the reMarkable range reads C001-C004. RMK-C004 (the document API answers 401 to a browser-paired device token even with Connect active) was declined at v1.6 for lack of admissible provenance and is admitted here on live proof from the same session, in a different form than the third-party source comment had implied. GIT-C002 re-verified: the `ssh://` workaround succeeded once `known_hosts` was populated from `gh api meta`. No contract change.

@@ -1,6 +1,6 @@
 # Claude Code — Hard Constraints MOC
 
-**Platform hub** · prefix `CLD` · 29 active, 1 superseded · schema: [[_SCHEMA-Constraints]] · Grows via the same-turn capture protocol.
+**Platform hub** · prefix `CLD` · 31 active, 1 superseded · schema: [[_SCHEMA-Constraints]] · Grows via the same-turn capture protocol.
 
 Scope: the **Claude Code harness** — subagent/skill definition loading, the seven agent-spawn vectors, permission and hook behaviour, and model-resolution precedence. Other Claude surfaces (claude.ai, Desktop, Cowork) share the `CLD` prefix as their constraints arrive; each node names the surface it binds.
 
@@ -36,6 +36,8 @@ Scope: the **Claude Code harness** — subagent/skill definition loading, the se
 | [[CLD-C028_project-key-resolution-is-not-single-valued\|CLD-C028]] | Three project-key resolvers (`FF`, `KV`, `ONe`) coexist and disagree on the `CLAUDE_CODE_PROJECT_DIR_NAME` override, and the harness's own `qRr` surfaces the divergence, so no computed key is authoritative | data | design-invalidating | 2026-09-03 |
 | [[CLD-C029_hook-ask-on-unparseable-bash-can-pass-without-prompt\|CLD-C029]] | **SUPERSEDED by CLD-C030.** In auto mode, a PreToolUse hook's `ask` on a Bash command the harness cannot parse (a heredoc) can resolve with no prompt and the command runs; one-call probes and file-tool writes prompted | governance | design-invalidating | 2026-09-15 |
 | [[CLD-C030_permission-prompts-are-recorded-only-in-the-desktop-app-log\|CLD-C030]] | The session transcript records neither a permission prompt nor its answer; in the desktop app only `~/Library/Logs/Claude/main.log` does, so a gate check from recollection or call timing is not a check (it produced the false findings F33 and CLD-C029) | governance | design-invalidating | 2026-09-15 |
+| [[CLD-C031_artifact-page-network-is-blocked\|CLD-C031]] | Surface claude.ai artifacts: page code has no outbound network beyond the artifact's own files and the contract's allowed script and font sources, so a page cannot fetch a URL, a public API or a backend; data arrives by paste, file pick, the artifact database or a granted connector | access | design-invalidating | 2026-09-22 |
+| [[CLD-C032_artifact-sample-call-exposes-model-tier-only\|CLD-C032]] | Surface claude.ai artifacts: the in-page Claude call selects by tier only (quick, default, complex), may be substituted by plan and reports the applied tier; no model ID, effort or system prompt, so named-model work cannot run inside a page | access | design-invalidating | 2026-09-22 |
 
 ## The never-assume list for agent work
 

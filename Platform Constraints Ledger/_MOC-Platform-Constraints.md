@@ -1,6 +1,6 @@
 # Platform Constraints Ledger — Global MOC
 
-**Version: 1.33 | 2026-09-18** · SSOT for hard platform constraints (facts that invalidate designs if unknown). Contract: [[_SCHEMA-Constraints]] · New entry: `_templates/constraint-entry-template.md` + same-turn capture protocol.
+**Version: 1.34 | 2026-09-22** · SSOT for hard platform constraints (facts that invalidate designs if unknown). Contract: [[_SCHEMA-Constraints]] · New entry: `_templates/constraint-entry-template.md` + same-turn capture protocol.
 
 ## Platforms
 
@@ -8,7 +8,7 @@
 |---|---|---|---|
 | Lovable (+ Lovable Cloud) | [[_Lovable-Constraints-MOC]] | 24 | LOV |
 | n8n | [[_n8n-Constraints-MOC]] | 2 | N8N |
-| Claude Code | [[_Claude-Code-Constraints-MOC]] | 29 | CLD |
+| Claude Code | [[_Claude-Code-Constraints-MOC]] | 31 | CLD |
 | Python (CPython + stdlib) | [[_Python-Constraints-MOC]] | 2 | PY |
 | Git (client, host-dependent, host attribution and push refusal) | [[_Git-Constraints-MOC]] | 4 | GIT |
 | Atlassian (Jira + Confluence, connector surface) | [[_Atlassian-Constraints-MOC]] | 1 | JIRA |
@@ -52,6 +52,8 @@
 - **[[JIRA-C001_jira-tools-silently-return-confluence-results|JIRA-C001]]** the Atlassian connector's Jira tools can silently return Confluence objects — getVisibleJiraProjects yields spaces, and literal-email JQL falls back to a Confluence keyword search that looks like results. Filter with currentUser()/accountId and assert issue shape (key/issuetype/status) before use
 - **[[CLD-C029_hook-ask-on-unparseable-bash-can-pass-without-prompt|CLD-C029]]** (**SUPERSEDED by [[CLD-C030_permission-prompts-are-recorded-only-in-the-desktop-app-log|CLD-C030]]: both asks reached the permission dialog and were answered, per the desktop app log**) in auto mode a hook's `ask` on a Bash command the harness cannot parse (a heredoc, for example) can resolve with no prompt: two tripwire asks never reached the owner and both commands ran, while every probe sent one call at a time prompted. Make protected writes through Edit or Write backed by `Edit(path)` ask rules, and treat the Bash tripwire as detection, not a checkpoint
 - **[[CLD-C030_permission-prompts-are-recorded-only-in-the-desktop-app-log|CLD-C030]]** the session transcript records neither a permission prompt nor its answer; in the desktop app only `~/Library/Logs/Claude/main.log` does, one request line and one decision line per prompt. A gate check built on recollection or call timing is not a check: that method produced two false findings on 2026-09-15 (F33 and CLD-C029), both contradicted by the log. Pair request and decision lines by id, with a fixed hands-off interval before answering
+- **[[CLD-C031_artifact-page-network-is-blocked|CLD-C031]]** a claude.ai artifact page has no outbound network from page code, so no URL, public API or backend can be fetched from inside it; paste, file pick, the artifact database or a granted connector are the inputs
+- **[[CLD-C032_artifact-sample-call-exposes-model-tier-only|CLD-C032]]** the artifact's in-page Claude call picks a tier, not a model, and the platform may serve a cheaper tier than asked; a named model at a set effort never runs inside a page
 - **[[RMK-C001_official-import-is-pdf-and-epub-only|RMK-C001]]** a reMarkable officially imports PDF and EPUB only, so sending markdown or any other text means either a converted reading document or a native notebook through the undocumented sync protocol. Decide which at the start
 - **[[RMK-C002_developer-mode-factory-resets-and-breaks-secure-boot|RMK-C002]]** SSH on a Paper Pro requires developer mode, which FACTORY-RESETS the device, breaks the secure-boot chain, adds a permanent boot warning and ends vendor support. Prefer the cloud or USB paths
 - **[[RMK-C003_sync-v3-write-replaces-the-account-wide-root-index|RMK-C003]]** adding ONE document through sync v3 replaces the ACCOUNT-WIDE root index, so a client that skips a line it cannot parse deletes that document from the whole library. Require a fail-closed parser, verbatim re-emission and a recorded previous root hash
@@ -66,6 +68,7 @@
 **Owner roadmap:** refine into a working knowledge graph (typed edges, query views); consolidate current platform data from the old platform-reference tree into `AI Knowledge Repository/` (owner-led, later session).
 
 **Changelog**
+- v1.34 (2026-09-22): **[[CLD-C031_artifact-page-network-is-blocked|CLD-C031]] and [[CLD-C032_artifact-sample-call-exposes-model-tier-only|CLD-C032]] added.** First claude.ai artifact-runtime nodes, admitted under the CLD row's other-surfaces provision rather than as a new platform: page code has no outbound network, and the in-page Claude call selects a tier, not a model. Both surfaced while designing an agentic layer for the Cover Letter Desk artifact in an owner project, where they ruled out a paste-a-URL feature and a named-model requirement. Counterpart capability [[CLD-CAP008_artifact-sample-capability-asks-claude-on-the-viewers-plan|CLD-CAP008]]. Provenance: runtime contract 0.2.52 type definitions (official-doc) read 2026-09-22.
 - v1.33 (2026-09-18): **[[RMK-C004_document-api-returns-401-to-a-browser-paired-device-token|RMK-C004]] cross-linked to [[RMK-CAP003_folder-creatable-through-sync-v3-in-the-vendor-shape|RMK-CAP003]].** The constraint is unchanged and stays true of the document API; its sanctioned workarounds now say folder creation on sync v3 is implemented and proven (`rr 0.3.6-jt.6`) and deletion is not, and the reMarkable MOC row says the refusal is of that API. Reason: the inject hook serves RMK-C004 whenever a prompt names `rr mkdir`, and the capabilities ledger is pull-only, so without the edge a session running the new procedure would read only that it cannot make its own folder. No count change.
 - v1.32 (2026-09-18): **[[GIT-C004_github-refuses-pushes-authored-under-a-private-email|GIT-C004]] re-verified the same day, and its inferred clause settled.** A push whose latest commit was authored under the noreply address was accepted and carried the five refused commits, still under the private address, through with it: the check reads the most recent commit only, as the doc says. No count change.
 - v1.31 (2026-09-18): **[[GIT-C004_github-refuses-pushes-authored-under-a-private-email|GIT-C004]] added.** With "Block command line pushes that expose my email" on, GitHub refused a push of five ledger commits into this repository, which is private and read only by its owner, because the latest commit carried the owner's address, which had moved onto the pushing account that day under [[GIT-C003_github-links-commits-to-the-account-holding-the-author-email|GIT-C003]]. The same repository had accepted pushes of commits under that address three days earlier. Costly, not on the quick sheet. Git 3 to 4.
