@@ -1,6 +1,6 @@
 # Claude Code — Capabilities MOC
 
-**Platform hub** · prefix `CLD-CAP` · 8 active · schema: [[_SCHEMA-Capabilities]] · Grows via the Change-Control-gated capture protocol.
+**Platform hub** · prefix `CLD-CAP` · 9 active · schema: [[_SCHEMA-Capabilities]] · Grows via the Change-Control-gated capture protocol.
 
 | ID | Capability | Domain | Leverage | Verified |
 |---|---|---|---|---|
@@ -12,5 +12,6 @@
 | [[CLD-CAP006_project-scope-settings-consulted-in-headless-and-sdk-runs\|CLD-CAP006]] | A project-scope `autoMemoryDirectory` redirect IS consulted in NON-INTERACTIVE runs (headless, `-p`, SDK) unconditionally, because `Aje() = !isInteractive() || trustAccepted`; and `userSettings` sits LAST in the chain, so a user-scope pin can never outrank a project redirect. Precedence half VERIFIED; the `--setting-sources` loading half stays UNKNOWN | data | unlocks | 2026-09-03 |
 | [[CLD-CAP007_skill-changes-load-live-without-restart\|CLD-CAP007]] | A skill added, edited or removed under `~/.claude/skills/` or a project's `.claude/skills/` is picked up INSIDE the running session, no restart: install and verify a skill in one session. Exceptions: bare mode; a top-level skills directory created mid-session; `SKILL.md` text only. Live pickup is not validation (CLD-C001) | deployment | accelerates | 2026-09-17 |
 | [[CLD-CAP008_artifact-sample-capability-asks-claude-on-the-viewers-plan\|CLD-CAP008]] | Surface claude.ai artifacts: a page declaring the sample capability asks Claude on the viewer's plan for streamed text or parsed JSON, with page tools, images, a five-minute cache and per-call consent, so agentic features run in a private artifact with no backend and no key | data | unlocks | 2026-09-22 |
+| [[CLD-CAP009_browser-pane-drives-artifact-claude-call-on-the-owners-account\|CLD-CAP009]] | Surface Claude Code's built-in browser pane: when signed in to the owner's claude.ai (observed 2026-09-22 and 2026-09-23; persistence UNKNOWN) and with the artifact's in-page consent standing, it opens that account's own private artifact, drives it by screen coordinates, reads it from screenshots and triggers its in-page Claude call on the owner's plan (usage approved per run; how consent was cleared is UNKNOWN), so Claude proof-runs the build without a person operating the page; transcriptions checked against the page's recomputed meter. Proven live twice (owner session 6); the Chrome extension's tools and form_input are UNKNOWN against the frame (CLD-C033) | access | accelerates | 2026-09-23 |
 
 **Cross-ledger:** capability nodes here link back to their governing [[_Claude-Code-Constraints-MOC|Claude Code constraints]] via `related`.
