@@ -8,9 +8,10 @@ than forking it (single-source-by-construction; `~/.claude/hooks/validate-ledger
 is a symlink to this canonical copy).
 
 Usage:
-    python3 ~/.claude/hooks/validate-ledger.py [<root>]
+    python3 "Platform Constraints Ledger/_tooling/validate-ledger.py" [<root>]
 
-<root> may be:
+With no <root>, it validates the repository that contains this script (found
+through any symlink to it). <root> may be:
   * the AI Knowledge Repository parent  -> validates EVERY ledger under it (default)
   * a single ledger root                -> validates just that ledger (profile auto-detected)
 
@@ -53,9 +54,9 @@ try:
 except ImportError:
     yaml = None
 
-DEFAULT_ROOT = os.path.expanduser(
-    "~/Projects/ai-knowledge-repository"
-)
+# The repository that contains this script: <repo>/Platform Constraints Ledger/_tooling/
+# realpath follows a ~/.claude/hooks symlink back to the canonical copy.
+DEFAULT_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
 
 DOMAINS = {"access", "credentials", "deployment", "data", "governance", "cost"}
 STATUSES = {"active", "superseded", "retired"}

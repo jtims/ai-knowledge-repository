@@ -39,7 +39,7 @@ Unlike the Constraints Ledger, capabilities are **not injected** at prompt time.
 
 The two ledgers share one contract validator and one git mirror; a capability node is held to the same lint (required keys, controlled vocab, id/filename agreement, provenance shape, required body sections, MOC listing, wikilink resolution) as a constraint node.
 
-**Tooling status (Phase 2 — PENDING as of v1.0):** the canonical `validate-ledger.py` (in the Constraints Ledger's `_tooling/`) is being generalized to lint both ledger kinds; `sync-to-git.sh` is being extended to validate *every* ledger under the `AI Knowledge Repository/` parent before mirroring; the `PostToolUse` tripwire is being broadened to fire on writes in either ledger. **Until that lands, capability nodes are validated manually against this schema before "done."** The validator-location choice (in-place vs. promoted to a shared parent `_tooling/`) is **open — logged in `_AIKR-Worklog-Roadmap.md` §3 as a revisit item.**
+**Tooling status (updated 2026-11-10):** the canonical `validate-ledger.py` (in the Constraints Ledger's `_tooling/`) lints both ledger kinds since its v2.0. The validator-location choice (in-place vs. promoted to a shared parent `_tooling/`) is an open design question in the owner's working notes.
 
 ## ID registry (monotonic per platform, never renumbered)
 

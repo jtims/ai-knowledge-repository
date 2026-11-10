@@ -24,11 +24,13 @@ Platform Capabilities Ledger/     the same shape, -CAP ids, _SCHEMA-Capabilities
 
 ## Validate
 
+From the repository root:
+
 ```bash
-python3 "Platform Constraints Ledger/_tooling/validate-ledger.py"
+python3 "Platform Constraints Ledger/_tooling/validate-ledger.py" .
 ```
 
-Exit 0 is PASS. The validator checks frontmatter parse, required keys, controlled vocabularies, id-to-filename match, non-empty provenance with type, ref and date on every entry, required body sections, and that every node is listed in its platform hub. An unquoted YAML sequence inside a provenance ref once shipped unnoticed; the validator exists because of that.
+With no argument the validator checks the repository that contains it; pass a path to check another ledger root. Exit 0 is PASS. The tooling notes for each ledger are in [`Platform Constraints Ledger/_tooling/README.md`](Platform%20Constraints%20Ledger/_tooling/README.md) and [`Platform Capabilities Ledger/_tooling/README.md`](Platform%20Capabilities%20Ledger/_tooling/README.md). The validator checks frontmatter parse, required keys, controlled vocabularies, id-to-filename match, non-empty provenance with type, ref and date on every entry, required body sections, and that every node is listed in its platform hub. An unquoted YAML sequence inside a provenance ref once shipped unnoticed; the validator exists because of that.
 
 ## How it is used in a session
 
